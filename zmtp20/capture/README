@@ -1,0 +1,17 @@
+Herry Sitepu <hisitepu@gmail.com>
+Fri, Apr 12, 2013 at 1:02 PM
+to ZeroMQ
+
+I have sniffed some of the traffic using the examples in the guide using ngrep. The captured traffic are commented along with the bytes captured by ngrep. Here are the captured files:
+
+1. PROTOCOL-REQREP
+This capture explain the REQ-REP dialog between hwclient and hwserver
+
+2. PROTOCOL-REQREP-IDENTITY
+This capture explain the REQ-REP dialog between hwclient and hwserver, the hwclient socket has been configured to use ZMQ_IDENTITY using zmq_setsockopt
+
+3. PROTOCOL-EXREQREP
+This capture explain the dialog between rrbroker, rrclient, and rrworker.
+rrbroker uses DEALER socket to talk to rrworker (REP) and rrbroker uses ROUTER socket to talk to rrclient (REQ).
+
+I'm not too sure about the correctness of the comments in the capture files, but as far that I can do, I used formal grammar as specified in RFC15. Any correction will be very appreciated.
