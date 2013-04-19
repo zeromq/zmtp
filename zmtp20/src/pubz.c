@@ -27,6 +27,7 @@ int main (void)
     //  Get greeting from peer
     tcp_recv (peer, &greeting, sizeof (greeting));
     assert (greeting.socktype == 2);
+    assert (greeting.revision >= 1);
 
     //  Get subscription from peer
     zmtp_msg_t msg = { 0 };
