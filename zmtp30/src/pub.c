@@ -133,7 +133,6 @@ int main (void)
         msg.size = 5;
         memcpy (msg.data, "HELLO", 5);
         while (time_now () < finish_at) {
-            //  Send 10K and then check time again
             int count = 0;
             for (count = 0; count < 10000; count++)
                 zmtp_send (peer, &msg);
@@ -148,7 +147,6 @@ int main (void)
         msg.size = 6;
         memcpy (msg.data, "HELLO", 5);
         while (time_now () < finish_at) {
-            //  Send 100K and then check time again
             int count = 0;
             for (count = 0; count < 10000; count++)
                 zmtp10_send (peer, &msg);
