@@ -19,19 +19,24 @@ int main (void)
     puts ("I: starting publisher");
     
     //  Create TCP socket
-    int peer;
-    if ((peer = socket (AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
+    int listener;
+    if ((listener = socket (AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
         derp ("socket");
 
-    //  We'll connect peer to subscriber for simplicity
-    struct sockaddr_in si_peer = { 0 };
-    si_peer.sin_family = AF_INET;
-    si_peer.sin_port = htons (9000);
-    si_peer.sin_addr.s_addr = inet_addr ("127.0.0.1");
+    //  Wait for one subscriber to connect, and handle it
+    struct sockaddr_in si_this = { 0 };
+    si_this.sin_family = AF_INET;
+    si_this.sin_port = htons (9000);
+    si_this.sin_addr.s_addr = htonl (INADDR_ANY);
+    if (bind (listener, &si_this, sizeof (si_this)) == -1)
+        derp ("bind");
 
-    //  Keep trying to connect until we succeed
-    while (connect (peer, &si_peer, sizeof (si_peer)) == -1)
-        sleep (1);
+    if (listen (listener, 1) == -1)
+        derp ("listen");
+    
+    int peer;
+    if ((peer = accept (listener, NULL, NULL)) == -1)
+        derp ("accept");
 
     //  Do full version detection (1.0, 2.0, or 3.0)
         
@@ -133,7 +138,6 @@ int main (void)
         msg.size = 5;
         memcpy (msg.data, "HELLO", 5);
         while (time_now () < finish_at) {
-            //  Send 10K and then check time again
             int count = 0;
             for (count = 0; count < 10000; count++)
                 zmtp_send (peer, &msg);
@@ -148,7 +152,6 @@ int main (void)
         msg.size = 6;
         memcpy (msg.data, "HELLO", 5);
         while (time_now () < finish_at) {
-            //  Send 100K and then check time again
             int count = 0;
             for (count = 0; count < 10000; count++)
                 zmtp10_send (peer, &msg);
